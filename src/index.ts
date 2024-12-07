@@ -1,17 +1,23 @@
-import fastify, {FastifyRequest} from 'fastify';
+import fastify, {FastifyRequest,FastifyReply} from 'fastify';
+import { PrismaClient } from '@prisma/client'
 
 const server = fastify();
+const prisma = new PrismaClient()
 
 interface RestoParams {
     restoName: string;
     id?: string;
 }
 
+server.get('/',async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    return 'Welcome to NomBuddy!'
+})
+
 // Routes for /restaurants
-server.get('/restaurants', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
+server.get('/restaurants', async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     // Fetch all restaurants
-    // Example: const restaurants = await prisma.restaurant.findMany();
-    return 'Fetch all restaurants';
+    const restaurants = await prisma.restaurant.findMany();
+    reply.send(restaurants);
 });
 
 server.post('/restaurants', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
