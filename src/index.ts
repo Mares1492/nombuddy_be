@@ -16,20 +16,6 @@ server.get('/',async (request:FastifyRequest<{ Params: RestoParams }>, reply:Fas
     return 'Welcome to NomBuddy v0.1!'
 })
 
-server.patch('/:restoName', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
-    const { restoName } = request.params;
-    // Update restaurant details
-    // Example: const updatedRestaurant = await prisma.restaurant.update({ where: { name: restoName }, data: request.body });
-    return `Update details for restaurant ${restoName}(actually not)`;
-});
-
-server.delete('/:restoName', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
-    const { restoName } = request.params;
-    // Delete restaurant
-    // Example: await prisma.restaurant.delete({ where: { name: restoName } });
-    return `Delete restaurant ${restoName}`;
-});
-
 // Routes for restaurant menus
 server.get('/:restoName/menus', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
     const { restoName } = request.params;
