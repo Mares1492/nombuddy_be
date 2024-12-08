@@ -6,12 +6,18 @@ async function main() {
 
     //models for deletion
     const models = [
-        'menu',
         'discount',
+        'order_category_position',
+        'order',
         'category_position',
-        'restaurant',
-        'restaurant_menu',
+        'position_option',
         'position',
+        'menu_category_menu',
+        'category_menu',
+        'restaurant_menu',
+        'restaurant_type_restaurant',
+        'menu',
+        'restaurant',
     ];
 
     for (const model of models) {
@@ -78,26 +84,26 @@ async function main() {
     }
 
     // Insert sample data for `menus`
-    await prisma.$transaction([
+    const menus = await prisma.$transaction([
         prisma.menu.create({
             data: {
                 name: 'Morning Delights',
                 description: 'Start your day right with a selection of hearty breakfasts and energizing drinks.',
-                menu_type_id: 0, // Breakfast
+                menu_type_id: 1, // Breakfast
             },
         }),
         prisma.menu.create({
             data: {
                 name: 'Noon Favorites',
                 description: 'Perfect for lunch, featuring savory sandwiches, fresh salads, and light soups.',
-                menu_type_id: 1, // Lunch
+                menu_type_id: 2, // Lunch
             },
         }),
         prisma.menu.create({
             data: {
                 name: 'Evening Specials',
                 description: 'A delightful dinner experience, with a mix of gourmet dishes and classic favorites.',
-                menu_type_id: 2, // Dinner
+                menu_type_id: 3, // Dinner
             },
         }),
         prisma.menu.create({
@@ -118,42 +124,42 @@ async function main() {
             data: {
                 name: 'Healthy Start',
                 description: 'Nutritious and delicious dishes for a light yet fulfilling breakfast or brunch.',
-                menu_type_id: 0, // Breakfast
+                menu_type_id: 1, // Breakfast
             },
         }),
         prisma.menu.create({
             data: {
                 name: 'Power Lunch',
                 description: 'A power-packed lunch to keep you energized with fresh salads and protein-rich options.',
-                menu_type_id: 1, // Lunch
+                menu_type_id: 2, // Lunch
             },
         }),
         prisma.menu.create({
             data: {
                 name: 'Evening Elegance',
                 description: 'Sophisticated dinner options featuring fine wines, appetizers, and elegant main courses.',
-                menu_type_id: 2, // Dinner
+                menu_type_id: 3, // Dinner
             },
         }),
         prisma.menu.create({
             data: {
                 name: 'After Hours',
                 description: 'A selection of late-night snacks and light bites perfect for those after-hours cravings.',
-                menu_type_id: 2, // Dinner
+                menu_type_id: 3, // Dinner
             },
         }),
         prisma.menu.create({
             data: {
                 name: 'Seasonal Feasts',
                 description: 'Celebrate the seasons with dishes inspired by the freshest ingredients of the time.',
-                menu_type_id: 2, // Dinner
+                menu_type_id: 3, // Dinner
             },
         }),
         prisma.menu.create({
             data: {
                 name: 'Veggie Power',
                 description: 'For the plant-based eaters, enjoy a menu full of fresh veggies and wholesome, meat-free dishes.',
-                menu_type_id: 0, // Breakfast
+                menu_type_id: 1, // Breakfast
             },
         }),
         prisma.menu.create({
@@ -180,56 +186,56 @@ async function main() {
     ]);
 
 
-    const categoriesCount = await prisma.category.count();
+    const categoriesCount = await prisma.category_menu.count();
     if (categoriesCount === 0) {
         // Insert sample data for `categories`
         await prisma.$transaction([
-            prisma.category.create({
+            prisma.category_menu.create({
                 data: {
+                    id:1,
                     name: 'Appetizers',
-                    description: 'Start your meal with a variety of savory appetizers, perfect for stimulating your appetite and setting the tone for the rest of the meal.',
                 },
             }),
-            prisma.category.create({
+            prisma.category_menu.create({
                 data: {
+                    id:2,
                     name: 'Main Courses',
-                    description: 'Indulge in hearty main courses featuring fresh, seasonal ingredients and expertly crafted recipes that highlight rich flavors and satisfying textures.',
                 },
             }),
-            prisma.category.create({
+            prisma.category_menu.create({
                 data: {
+                    id: 3,
                     name: 'Desserts',
-                    description: 'End your meal with a selection of delectable desserts, ranging from decadent cakes to refreshing fruit-based treats, perfect for every sweet tooth.',
                 },
             }),
-            prisma.category.create({
+            prisma.category_menu.create({
                 data: {
+                    id: 4,
                     name: 'Beverages',
-                    description: 'Quench your thirst with a variety of beverages, from freshly brewed coffee and tea to invigorating cold drinks, all designed to complement your meal.',
                 },
             }),
-            prisma.category.create({
+            prisma.category_menu.create({
                 data: {
+                    id: 5,
                     name: 'Salads',
-                    description: 'Savor the freshness of our selection of salads, featuring vibrant vegetables, tangy dressings, and healthy toppings to brighten your meal.',
                 },
             }),
-            prisma.category.create({
+            prisma.category_menu.create({
                 data: {
+                    id: 6,
                     name: 'Soups',
-                    description: 'Warm up with our flavorful soups, ranging from creamy and comforting to light and brothy, perfect for every season and taste preference.',
                 },
             }),
-            prisma.category.create({
+            prisma.category_menu.create({
                 data: {
+                    id: 7,
                     name: 'Sandwiches',
-                    description: 'Enjoy our wide variety of sandwiches, crafted with fresh bread, premium meats, and tasty fillings for a satisfying meal on the go.',
                 },
             }),
-            prisma.category.create({
+            prisma.category_menu.create({
                 data: {
+                    id: 8,
                     name: 'Pasta',
-                    description: 'Delight in our selection of freshly made pastas, featuring classic Italian sauces, rich cheeses, and a perfect blend of flavors for pasta lovers.',
                 },
             }),
         ]);
@@ -384,7 +390,6 @@ async function main() {
             prisma.option.create({data: {name: 'Sour Cream'}}),
         ]);
 
-        //Can only delete option if there is no relation, so if one is missing the other is too
         await prisma.$transaction([
             // Grilled Salmon
             prisma.position_option.create({
@@ -491,13 +496,14 @@ async function main() {
             prisma.discount_type.create({data: {name: 'Happy Hour'}}),
         ]);
     }
+
     type DiscountCreateInput = Omit<Prisma.discountUncheckedCreateInput, 'id' | 'code'>;
     // Insert sample data for `discounts`
     const discountInputOne:DiscountCreateInput = {
         start: new Date('2023-12-01'),
         end: new Date('2023-12-31'),
         percentage: 15.5,
-        menu_id: 3,
+        menu_id: menus[0].id,
         discount_type_id: 1, // Seasonal Offer
     }
 
@@ -505,7 +511,7 @@ async function main() {
         start: new Date('2024-01-01'),
         end: new Date('2024-01-31'),
         percentage: 10.0,
-        menu_id: 4,
+        menu_id: menus[2].id,
         discount_type_id: 2, // Happy Hour
     }
     await prisma.$transaction([
