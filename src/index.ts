@@ -27,11 +27,10 @@ server.post('/restaurants', async (request:FastifyRequest<{ Params: RestoParams 
     return 'Create a new restaurant';
 });
 
-// Routes for a specific restaurant by name
+// Routes for a specific restaurant by id
 server.get('/restaurants/:restoId', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
     const { restoId } = request.params;
     const id = Number(restoId)
-    // Fetch restaurant by name
     const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
     if (!restaurant) {
         return {body:{},message:"No restaurant found"};
