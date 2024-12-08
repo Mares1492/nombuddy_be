@@ -5,19 +5,20 @@ const server = fastify();
 const prisma = new PrismaClient()
 
 interface RestoParams {
+    restoId: number;
     restoName: string;
     id?: string;
 }
 
 server.get('/',async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    return 'Welcome to NomBuddy!'
+    return 'Welcome to NomBuddy v0.1!'
 })
 
 // Routes for /restaurants
 server.get('/restaurants', async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     // Fetch all restaurants
     const restaurants = await prisma.restaurant.findMany();
-    reply.send(restaurants);
+    reply.send(restaurants.map(({formal_name,display_name}) => ({formal_name,display_name})));
 });
 
 server.post('/restaurants', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
@@ -27,18 +28,22 @@ server.post('/restaurants', async (request:FastifyRequest<{ Params: RestoParams 
 });
 
 // Routes for a specific restaurant by name
-server.get('/:restoName', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
-    const { restoName } = request.params;
+server.get('/restaurants/:restoId', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
+    const { restoId } = request.params;
+    const id = Number(restoId)
     // Fetch restaurant by name
-    // Example: const restaurant = await prisma.restaurant.findUnique({ where: { name: restoName } });
-    return `Fetch details for restaurant ${restoName}`;
+    const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
+    if (!restaurant) {
+        return {body:{},message:"No restaurant found"};
+    }
+    return reply.send({body:restaurant,message:`Found ${restaurant.display_name}`});
 });
 
 server.patch('/:restoName', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
     const { restoName } = request.params;
     // Update restaurant details
     // Example: const updatedRestaurant = await prisma.restaurant.update({ where: { name: restoName }, data: request.body });
-    return `Update details for restaurant ${restoName}`;
+    return `Update details for restaurant ${restoName}(actually not)`;
 });
 
 server.delete('/:restoName', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
