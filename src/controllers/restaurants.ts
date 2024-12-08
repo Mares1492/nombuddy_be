@@ -1,4 +1,3 @@
-
 // Routes for /restaurants
 import {FastifyReply, FastifyRequest} from "fastify";
 import type {RestoParams} from "../types/global";
@@ -12,8 +11,11 @@ export const getRestaurants = async (request:FastifyRequest<{ Params: RestoParam
 
 export const createRestaurant = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     // Add a new restaurant
+    // TODO: check input data
+    // TODO: create right structure
+    // TODO: insert new resto into db
     // Example: const newRestaurant = await prisma.restaurant.create({ data: request.body });
-    return 'Create a new restaurant';
+    return reply.send({body:{},message:"New restaurant has been created"});
 };
 
 // Routes for a specific restaurant by id
@@ -22,7 +24,31 @@ export const getRestaurantById =  async (request:FastifyRequest<{ Params: RestoP
     const id = Number(restoId)
     const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
     if (!restaurant) {
-        return {body:{},message:"No restaurant found"};
+        return reply.send({body:{},message:"No restaurant found"});
     }
     return reply.send({body:restaurant,message:`Found ${restaurant.display_name}`});
 };
+
+export const updateRestaurantById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    const {restoId} = request.params
+    const id = Number(restoId)
+    const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
+    if (!restaurant) {
+        return reply.send({body:{},message:"No restaurant found"});
+    }
+    // TODO: check if has right to do so
+    // TODO: update resto data
+    return reply.send({body:{},message:"Updated restaurant data(actually not)"});
+}
+
+export const deleteRestaurantById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    const {restoId} = request.params;
+    const id = Number(restoId);
+    const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
+    if (!restaurant) {
+        return {body:{},message:"No restaurant found"};
+    }
+    // TODO: check if has right to do so
+    // TODO: delete resto
+    return reply.send({body:{},message:"Updated restaurant data(actually not)"});
+}
