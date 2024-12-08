@@ -1,42 +1,20 @@
 import fastify, {FastifyRequest,FastifyReply} from 'fastify';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
+import type { RestoParams } from './types/global';
+import autoLoad from '@fastify/autoload'
+
+import path from "node:path";
 
 const server = fastify();
-const prisma = new PrismaClient()
-
-interface RestoParams {
-    restoId: number;
-    restoName: string;
-    id?: string;
-}
+export const prisma = new PrismaClient()
+//register all paths in routes
+server.register(autoLoad, {
+    dir: path.join(__dirname, 'routes')
+});
 
 server.get('/',async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     return 'Welcome to NomBuddy v0.1!'
 })
-
-// Routes for /restaurants
-server.get('/restaurants', async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    // Fetch all restaurants
-    const restaurants = await prisma.restaurant.findMany();
-    reply.send(restaurants.map(({formal_name,display_name}) => ({formal_name,display_name})));
-});
-
-server.post('/restaurants', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
-    // Add a new restaurant
-    // Example: const newRestaurant = await prisma.restaurant.create({ data: request.body });
-    return 'Create a new restaurant';
-});
-
-// Routes for a specific restaurant by id
-server.get('/restaurants/:restoId', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
-    const { restoId } = request.params;
-    const id = Number(restoId)
-    const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
-    if (!restaurant) {
-        return {body:{},message:"No restaurant found"};
-    }
-    return reply.send({body:restaurant,message:`Found ${restaurant.display_name}`});
-});
 
 server.patch('/:restoName', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
     const { restoName } = request.params;
