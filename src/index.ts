@@ -9,7 +9,8 @@ const server = fastify();
 export const prisma = new PrismaClient()
 //register all paths in routes
 server.register(autoLoad, {
-    dir: path.join(__dirname, 'routes')
+    dir: path.join(__dirname, 'routes'),
+    routeParams: true
 });
 
 server.get('/',async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
