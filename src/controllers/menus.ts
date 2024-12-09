@@ -5,8 +5,11 @@ import {prisma} from "../index";
 
 export const getAllMenus = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     // Fetch menu from restaurant
-    const menus = await prisma.restaurant.findMany();
-    reply.send(menus);
+    const menus = await prisma.menu.findMany();
+    if (!menus) {
+        reply.send({body:{},message:"No menus found."});
+    }
+    reply.send({body:menus,message:"Found menus"});
 };
 
 export const getMenusFromRestaurantById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
@@ -21,7 +24,7 @@ export const getMenusFromRestaurantById = async (request:FastifyRequest<{ Params
     if (!menus || menus.length === 0) {
         reply.send({body:{},message:"No restaurant found"});
     }
-    reply.send(menus);
+    reply.send({body: menus,message:`Menus found for resto-${id}`});
 };
 
 export const getMenuById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
@@ -31,7 +34,10 @@ export const getMenuById = async (request:FastifyRequest<{ Params: RestoParams }
             id: Number(menuId)
         }
     });
-    reply.send(menu);
+    if (!menu) {
+        reply.send({body:{},message:"No menu found"});
+    }
+    reply.send({body:menu,message:"Menu found"});
 };
 
 export const createMenuInRestaurantById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
