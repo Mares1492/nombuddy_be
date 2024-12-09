@@ -36,7 +36,7 @@ async function main() {
     }
 
     // Insert sample data for `restaurants`
-    await prisma.$transaction([
+    const restaurants = await prisma.$transaction([
         prisma.restaurant.create({
             data: {
                 formal_name: 'The Gourmet Kitchen',
@@ -486,6 +486,69 @@ async function main() {
             }),
         ]);
     }
+
+    await prisma.$transaction([
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[0].id,
+                restaurant_id:restaurants[0].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[1].id,
+                restaurant_id:restaurants[0].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[2].id,
+                restaurant_id:restaurants[1].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[3].id,
+                restaurant_id:restaurants[1].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[4].id,
+                restaurant_id:restaurants[2].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[5].id,
+                restaurant_id:restaurants[2].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[6].id,
+                restaurant_id:restaurants[3].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[7].id,
+                restaurant_id:restaurants[3].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[8].id,
+                restaurant_id:restaurants[4].id,
+            }
+        }),
+        prisma.restaurant_menu.create({
+            data:{
+                menu_id:menus[9].id,
+                restaurant_id:restaurants[4].id,
+            }
+        }),
+    ])
 
 
     const discountTypesCount = await prisma.discount_type.count();
