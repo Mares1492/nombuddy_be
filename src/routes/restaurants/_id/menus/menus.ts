@@ -1,8 +1,10 @@
 import {FastifyInstance} from "fastify";
-import {getAllMenus, getMenusFromRestaurantById} from "../../../../controllers/menus";
+import {
+    createMenuInRestaurantById,
+    getMenusFromRestaurantById
+} from "../../../../controllers/menus";
 
 export default async (fastify: FastifyInstance) => {
-    fastify.get('/', getAllMenus);
-    fastify.get('/:menuId', getMenusFromRestaurantById);
-    fastify.post('/', ()=>{});
+    fastify.get('/', getMenusFromRestaurantById);
+    fastify.post('/', createMenuInRestaurantById);
 }
