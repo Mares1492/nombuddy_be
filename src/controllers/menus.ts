@@ -47,13 +47,11 @@ export const createRestaurantMenuById = async (request:FastifyRequest<{ Params: 
 };
 
 export const updateRestaurantMenuById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const {restoId, menuId} = request.params
-    const id = Number(restoId)
-    const menu = await prisma.menu.findFirst({ where: { id:id } });
-    if (!menu) {
-        return reply.send({body:{},message:"No restaurant found"});
-    }
-    // TODO: check if has right to do so
+    const {menuId} = request.params
+    const body = request.body
+    // TODO: get updated data from body
+    // TODO: check if has right to do updates
+    // const updatedMenu = await prisma.menu.update()
     // TODO: update resto menu data
-    return reply.send({body:{},message:"Updated restaurant data(actually not)"});
+    return reply.send({body:{},message:`Update menu ${menuId} (actually not)`});
 }
