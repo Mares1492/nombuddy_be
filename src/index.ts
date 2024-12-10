@@ -17,13 +17,6 @@ server.get('/',async (request:FastifyRequest<{ Params: RestoParams }>, reply:Fas
     return `<h1 style="color: rebeccapurple">Welcome to NomBuddy v0.1!</h1>`
 })
 
-server.patch('/:restoName/menus/:id', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
-    const { restoName, id } = request.params;
-    // Update menu by ID
-    // Example: const updatedMenu = await prisma.menu.update({ where: { id: Number(id) }, data: request.body });
-    return `Update menu ${id} for restaurant ${restoName}`;
-});
-
 // Routes for restaurant employees
 server.get('/:restoName/persons', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
     const { restoName } = request.params;
