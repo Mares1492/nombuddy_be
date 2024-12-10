@@ -12,7 +12,7 @@ export const getAllMenus = async (request:FastifyRequest<{ Params: RestoParams }
     reply.send({body:menus,message:"Found menus"});
 };
 
-export const getMenusFromRestaurantById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+export const getAllRestaurantMenusById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     // Fetch menu from restaurant
     const { id } = request.params;
     const menus:Array<Object> = await prisma.$queryRaw`
@@ -40,8 +40,20 @@ export const getMenuById = async (request:FastifyRequest<{ Params: RestoParams }
     reply.send({body:menu,message:"Menu found"});
 };
 
-export const createMenuInRestaurantById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+export const createRestaurantMenuById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const { id } = request.params;
     // Example: const newMenu = await prisma.menu.create({ data: { ...request.body, restaurantName: restoName } });
     return {body:{},message:`Added new menu for restaurant ${id}`};
 };
+
+export const updateRestaurantMenuById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    const {restoId, menuId} = request.params
+    const id = Number(restoId)
+    const menu = await prisma.menu.findFirst({ where: { id:id } });
+    if (!menu) {
+        return reply.send({body:{},message:"No restaurant found"});
+    }
+    // TODO: check if has right to do so
+    // TODO: update resto menu data
+    return reply.send({body:{},message:"Updated restaurant data(actually not)"});
+}
