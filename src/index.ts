@@ -14,23 +14,8 @@ server.register(autoLoad, {
 });
 
 server.get('/',async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    return 'Welcome to NomBuddy v0.1!'
+    return `<h1 style="color: rebeccapurple">Welcome to NomBuddy v0.1!</h1>`
 })
-
-// Routes for restaurant menus
-server.get('/:restoName/menus', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
-    const { restoName } = request.params;
-    // Fetch menus for a restaurant
-    // Example: const menus = await prisma.menu.findMany({ where: { restaurantName: restoName } });
-    return `Fetch menus for restaurant ${restoName}`;
-});
-
-server.post('/:restoName/menus', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
-    const { restoName } = request.params;
-    // Add a new menu
-    // Example: const newMenu = await prisma.menu.create({ data: { ...request.body, restaurantName: restoName } });
-    return `Add new menu for restaurant ${restoName}`;
-});
 
 server.patch('/:restoName/menus/:id', async (request:FastifyRequest<{ Params: RestoParams }>, reply) => {
     const { restoName, id } = request.params;
