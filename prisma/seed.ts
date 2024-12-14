@@ -26,7 +26,8 @@ async function main() {
         await prisma[model].deleteMany();
     }
     const RestoStateCount = await prisma.restaurant_state.count();
-    if (RestoStateCount < 3) {
+    if (RestoStateCount !== 3 ) {
+        await prisma.restaurant_state.deleteMany();
         // Insert sample data for `restaurant_state`
         await prisma.$transaction([
             prisma.restaurant_state.create({data: {name: 'Open'}}),
@@ -74,7 +75,8 @@ async function main() {
         }),
     ]);
     const menuTypesCount = await prisma.menu_type.count();
-    if (menuTypesCount === 0) {
+    if (menuTypesCount !== 3) {
+        await prisma.menu_type.deleteMany();
         // Insert sample data for `menu_types`
         await prisma.$transaction([
             prisma.menu_type.create({data: {name: 'Breakfast'}}),
