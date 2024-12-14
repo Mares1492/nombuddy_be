@@ -3,11 +3,9 @@ import {FastifyReply, FastifyRequest} from "fastify";
 import {RestoMenu, RestoParams} from "../types/global";
 import {prisma} from "../index";
 import {getRestaurantMenus} from "../services/menus";
-
-const returnErrorMessage = (message:string) => ({body:{},message:message});
+import {returnErrorMessage} from "../utils/errorHandlers";
 
 export const getAllMenus = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    // Fetch menu from restaurant
     const menus = await prisma.menu.findMany();
     if (!menus) {
         reply.send(returnErrorMessage("No menus found."));
