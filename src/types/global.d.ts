@@ -8,6 +8,7 @@ export interface RestoMenu {
 export interface RestoParams {
     restoId: number;
     menuId: number;
+    posId: number;
     restoName: string;
     id?: string;
 }
