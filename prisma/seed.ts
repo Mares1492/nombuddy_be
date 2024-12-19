@@ -13,7 +13,7 @@ async function main() {
         'position_option',
         'position',
         'menu_category_menu',
-        'category_menu',
+        'menu_category',
         'restaurant_menu',
         'restaurant_type_restaurant',
         'menu',
@@ -188,53 +188,53 @@ async function main() {
     ]);
 
 
-    const categoriesCount = await prisma.category_menu.count();
+    const categoriesCount = await prisma.menu_category.count();
     if (categoriesCount === 0) {
         // Insert sample data for `categories`
         await prisma.$transaction([
-            prisma.category_menu.create({
+            prisma.menu_category.create({
                 data: {
                     id:1,
                     name: 'Appetizers',
                 },
             }),
-            prisma.category_menu.create({
+            prisma.menu_category.create({
                 data: {
                     id:2,
                     name: 'Main Courses',
                 },
             }),
-            prisma.category_menu.create({
+            prisma.menu_category.create({
                 data: {
                     id: 3,
                     name: 'Desserts',
                 },
             }),
-            prisma.category_menu.create({
+            prisma.menu_category.create({
                 data: {
                     id: 4,
                     name: 'Beverages',
                 },
             }),
-            prisma.category_menu.create({
+            prisma.menu_category.create({
                 data: {
                     id: 5,
                     name: 'Salads',
                 },
             }),
-            prisma.category_menu.create({
+            prisma.menu_category.create({
                 data: {
                     id: 6,
                     name: 'Soups',
                 },
             }),
-            prisma.category_menu.create({
+            prisma.menu_category.create({
                 data: {
                     id: 7,
                     name: 'Sandwiches',
                 },
             }),
-            prisma.category_menu.create({
+            prisma.menu_category.create({
                 data: {
                     id: 8,
                     name: 'Pasta',
@@ -244,7 +244,7 @@ async function main() {
     }
 
     // Insert sample data for `positions`
-    await prisma.$transaction([
+    const positions = await prisma.$transaction([
         // Appetizers
         prisma.position.create({
             data: {
@@ -365,31 +365,31 @@ async function main() {
     const optionsCount = await prisma.option.count();
     if (optionsCount === 0) {
         await prisma.$transaction([
-            prisma.option.create({data: {name: 'Garlic'}}),
-            prisma.option.create({data: {name: 'Chilli'}}),
-            prisma.option.create({data: {name: 'Cream'}}),
-            prisma.option.create({data: {name: 'Tomato Sauce'}}),
-            prisma.option.create({data: {name: 'Cheese'}}),
-            prisma.option.create({data: {name: 'Bacon'}}),
-            prisma.option.create({data: {name: 'Olives'}}),
-            prisma.option.create({data: {name: 'Onions'}}),
-            prisma.option.create({data: {name: 'Mushrooms'}}),
-            prisma.option.create({data: {name: 'Avocado'}}),
-            prisma.option.create({data: {name: 'Lettuce'}}),
-            prisma.option.create({data: {name: 'Pickles'}}),
-            prisma.option.create({data: {name: 'Feta Cheese'}}),
-            prisma.option.create({data: {name: 'Spinach'}}),
-            prisma.option.create({data: {name: 'Tomatoes'}}),
-            prisma.option.create({data: {name: 'Pineapple'}}),
-            prisma.option.create({data: {name: 'Cucumber'}}),
-            prisma.option.create({data: {name: 'Sweet Corn'}}),
-            prisma.option.create({data: {name: 'Bell Peppers'}}),
-            prisma.option.create({data: {name: 'Mustard'}}),
-            prisma.option.create({data: {name: 'BBQ Sauce'}}),
-            prisma.option.create({data: {name: 'Ranch Dressing'}}),
-            prisma.option.create({data: {name: 'Chives'}}),
-            prisma.option.create({data: {name: 'Pesto'}}),
-            prisma.option.create({data: {name: 'Sour Cream'}}),
+            prisma.option.create({data: {id:1,name: 'Garlic'}}),
+            prisma.option.create({data: {id:2,name: 'Chilli'}}),
+            prisma.option.create({data: {id:3,name: 'Cream'}}),
+            prisma.option.create({data: {id:4,name: 'Tomato Sauce'}}),
+            prisma.option.create({data: {id:5,name: 'Cheese'}}),
+            prisma.option.create({data: {id:6,name: 'Bacon'}}),
+            prisma.option.create({data: {id:7,name: 'Olives'}}),
+            prisma.option.create({data: {id:8,name: 'Onions'}}),
+            prisma.option.create({data: {id:9,name: 'Mushrooms'}}),
+            prisma.option.create({data: {id:10,name: 'Avocado'}}),
+            prisma.option.create({data: {id:11,name: 'Lettuce'}}),
+            prisma.option.create({data: {id:12,name: 'Pickles'}}),
+            prisma.option.create({data: {id:13,name: 'Feta Cheese'}}),
+            prisma.option.create({data: {id:14,name: 'Spinach'}}),
+            prisma.option.create({data: {id:15,name: 'Tomatoes'}}),
+            prisma.option.create({data: {id:16,name: 'Pineapple'}}),
+            prisma.option.create({data: {id:17,name: 'Cucumber'}}),
+            prisma.option.create({data: {id:18,name: 'Sweet Corn'}}),
+            prisma.option.create({data: {id:19,name: 'Bell Peppers'}}),
+            prisma.option.create({data: {id:20,name: 'Mustard'}}),
+            prisma.option.create({data: {id:21,name: 'BBQ Sauce'}}),
+            prisma.option.create({data: {id:22,name: 'Ranch Dressing'}}),
+            prisma.option.create({data: {id:23,name: 'Chives'}}),
+            prisma.option.create({data: {id:24,name: 'Pesto'}}),
+            prisma.option.create({data: {id:25,name: 'Sour Cream'}}),
         ]);
 
         await prisma.$transaction([
@@ -397,16 +397,14 @@ async function main() {
             prisma.position_option.create({
                 data: {
                     option_id: 1, // Garlic
-                    position_id: 1, // Grilled Salmon
-                    amount: 2, //in grams
+                    position_id: positions[0].id, // Grilled Salmon
                     description: 'Add a garlic flavor to your salmon.',
                 },
             }),
             prisma.position_option.create({
                 data: {
                     option_id: 2, // Chilli
-                    position_id: 1, // Grilled Salmon
-                    amount: 1,
+                    position_id: positions[0].id, // Grilled Salmon
                     description: 'Add some spice with fresh chilli.',
                 },
             }),
@@ -415,16 +413,14 @@ async function main() {
             prisma.position_option.create({
                 data: {
                     option_id: 3, // Cream
-                    position_id: 2, // Caesar Salad
-                    amount: 60,
+                    position_id: positions[1].id, // Caesar Salad
                     description: 'Add a creamy touch to your salad.',
                 },
             }),
             prisma.position_option.create({
                 data: {
                     option_id: 7, // Olives
-                    position_id: 2, // Caesar Salad
-                    amount: 5,
+                    position_id: positions[1].id, // Caesar Salad
                     description: 'Add some olives for extra flavor.',
                 },
             }),
@@ -433,8 +429,7 @@ async function main() {
             prisma.position_option.create({
                 data: {
                     option_id: 4, // Cheese
-                    position_id: 3, // Chocolate Lava Cake
-                    amount: 25,
+                    position_id: positions[2].id, // Chocolate Lava Cake
                     description: 'Top with a rich creamy cheese.',
                 },
             }),
@@ -443,16 +438,14 @@ async function main() {
             prisma.position_option.create({
                 data: {
                     option_id: 6, // Bacon
-                    position_id: 4, // Margarita Pizza
-                    amount: 50,
+                    position_id: positions[3].id, // Margarita Pizza
                     description: 'Top your pizza with crispy bacon.',
                 },
             }),
             prisma.position_option.create({
                 data: {
                     option_id: 8, // Onions
-                    position_id: 4, // Margarita Pizza
-                    amount: 25,
+                    position_id: positions[3].id, // Margarita Pizza
                     description: 'Add fresh onions for extra crunch.',
                 },
             }),
@@ -461,8 +454,7 @@ async function main() {
             prisma.position_option.create({
                 data: {
                     option_id: 5, // Tomato Sauce
-                    position_id: 5, // Grilled Ribeye Steak
-                    amount: 60,
+                    position_id: positions[4].id, // Grilled Ribeye Steak
                     description: 'A tangy tomato sauce on the side.',
                 },
             }),
@@ -471,8 +463,7 @@ async function main() {
             prisma.position_option.create({
                 data: {
                     option_id: 9, // Lettuce
-                    position_id: 6, // Chicken Alfredo
-                    amount: 60,
+                    position_id: positions[5].id, // Chicken Alfredo
                     description: 'Add a refreshing lettuce garnish.',
                 },
             }),
@@ -481,8 +472,7 @@ async function main() {
             prisma.position_option.create({
                 data: {
                     option_id: 10, // Pickles
-                    position_id: 7, // Vegetable Stir Fry
-                    amount: 20,
+                    position_id: positions[6].id, // Vegetable Stir Fry
                     description: 'Add tangy pickles for extra flavor.',
                 },
             }),
@@ -552,6 +542,21 @@ async function main() {
         }),
     ])
 
+    // category_position section
+    const menuPositions = await prisma.$transaction([
+        prisma.menu_position.create({
+            data:{
+                menu_id:menus[0].id,
+                position_id:positions[0].id,
+            }
+        }),
+        prisma.menu_position.create({
+            data:{
+                menu_id:menus[0].id,
+                position_id:restaurants[0].id,
+            }
+        }),
+    ])
 
     const discountTypesCount = await prisma.discount_type.count();
     if (discountTypesCount === 0) {
@@ -568,7 +573,7 @@ async function main() {
         start: new Date('2023-12-01'),
         end: new Date('2023-12-31'),
         percentage: 15.5,
-        menu_id: menus[0].id,
+        menu_position_id: menuPositions[0].id,
         discount_type_id: 1, // Seasonal Offer
     }
 
@@ -576,7 +581,7 @@ async function main() {
         start: new Date('2024-01-01'),
         end: new Date('2024-01-31'),
         percentage: 10.0,
-        menu_id: menus[2].id,
+        menu_position_id: menuPositions[1].id,
         discount_type_id: 2, // Happy Hour
     }
     await prisma.$transaction([
