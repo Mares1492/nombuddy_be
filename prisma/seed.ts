@@ -1,4 +1,5 @@
 import {Prisma, PrismaClient} from '@prisma/client';
+import {create} from "node:domain";
 
 const prisma = new PrismaClient();
 
@@ -7,9 +8,9 @@ async function main() {
     //models for deletion
     const models = [
         'discount',
-        'order_category_position',
+        'order_menu_position',
         'order',
-        'category_position',
+        'menu_position',
         'position_option',
         'position',
         'menu_category_menu',
@@ -242,6 +243,30 @@ async function main() {
             }),
         ]);
     }
+
+    await prisma.$transaction([
+        prisma.menu_category_menu.create({
+            data:{
+                id:1,
+                menu_id:menus[0].id,
+                category_id:1,
+            },
+        }),
+        prisma.menu_category_menu.create({
+            data:{
+                id:2,
+                menu_id:menus[0].id,
+                category_id:2,
+            },
+        }),
+        prisma.menu_category_menu.create({
+            data:{
+                id:3,
+                menu_id:menus[0].id,
+                category_id:3,
+            }
+        })
+    ])
 
     // Insert sample data for `positions`
     const positions = await prisma.$transaction([
@@ -546,14 +571,18 @@ async function main() {
     const menuPositions = await prisma.$transaction([
         prisma.menu_position.create({
             data:{
-                menu_id:menus[0].id,
+                id:1,
+                menu_category_menu_id:1,
                 position_id:positions[0].id,
+                is_available:true
             }
         }),
         prisma.menu_position.create({
             data:{
-                menu_id:menus[0].id,
+                id:2,
+                menu_category_menu_id:2,
                 position_id:restaurants[0].id,
+                is_available:true
             }
         }),
     ])
