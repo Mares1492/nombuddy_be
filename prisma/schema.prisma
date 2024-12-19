@@ -14,28 +14,16 @@ model account_data {
   finance_data_account_data finance_data_account_data[]
 }
 
-model category_position {
-  id                      Int                       @id(map: "category_position_pk") @default(autoincrement())
-  category_id             Int
-  position_id             Int
-  menu_id                 Int
-  is_available            Boolean
-  category                category_menu             @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "category_association_1")
-  menu                    menu                      @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "category_position_menu")
-  position                position                  @relation(fields: [position_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "position_association_1")
-  order_category_position order_category_position[]
-}
-
 model discount {
-  id               Int           @id(map: "discount_pk") @default(autoincrement())
+  id               Int           @id(map: "discount_pk")
   start            DateTime      @db.Timestamp(6)
   end              DateTime      @db.Timestamp(6)
-  code             String        @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code             String        @db.Uuid
   percentage       Decimal       @db.Decimal
-  menu_id          Int
   discount_type_id Int
+  menu_position_id Int
+  menu_position    menu_position @relation(fields: [menu_position_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "discount_discount__fk")
   discount_type    discount_type @relation(fields: [discount_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "discount_discount_type")
-  menu             menu          @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "discount_menu")
 }
 
 model discount_type {
@@ -73,8 +61,6 @@ model menu {
   name               String               @db.VarChar(30)
   menu_type_id       Int
   description        String?              @db.VarChar(400)
-  category_position  category_position[]
-  discount           discount[]
   menu_type          menu_type            @relation(fields: [menu_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu_menu_types")
   menu_category_menu menu_category_menu[]
   restaurant_menu    restaurant_menu[]
@@ -89,29 +75,21 @@ model menu_type {
 model option {
   id              Int               @id(map: "option_pk") @default(autoincrement())
   name            String            @db.VarChar(100)
+  description     String?           @db.VarChar(100)
   position_option position_option[]
 }
 
 model order {
-  id                      Int                       @id(map: "order_pk") @default(autoincrement())
-  order_number            Int
-  display_id              String                    @db.Uuid
-  orderer_email           String                    @db.VarChar(50)
-  order_time              DateTime                  @db.Timestamp(6)
-  expected_serve_time     DateTime                  @db.Timestamp(6)
-  serve_time              DateTime                  @db.Timestamp(6)
-  order_state_id          Int
-  order_state             order_state               @relation(fields: [order_state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_order_state")
-  order_category_position order_category_position[]
-}
-
-model order_category_position {
-  id                   Int               @id(map: "order_category_position_pk") @default(autoincrement())
-  order_id             Int
-  category_position_id Int
-  chosen_options       Int
-  order                order             @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_categories_order")
-  category_position    category_position @relation(fields: [category_position_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_category_position_category_position")
+  id                  Int                   @id(map: "order_pk") @default(autoincrement())
+  order_number        Int
+  display_id          String                @db.Uuid
+  orderer_email       String                @db.VarChar(50)
+  order_time          DateTime              @db.Timestamp(6)
+  expected_serve_time DateTime              @db.Timestamp(6)
+  serve_time          DateTime              @db.Timestamp(6)
+  order_state_id      Int
+  order_state         order_state           @relation(fields: [order_state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_order_state")
+  order_menu_position order_menu_position[]
 }
 
 model order_state {
@@ -128,39 +106,40 @@ model person {
 }
 
 model position {
-  id                Int                 @id(map: "position_pk") @default(autoincrement())
-  name              String              @db.VarChar(30)
-  description       String?             @db.VarChar(200)
-  display_options   Boolean
-  display_price     Boolean
-  price             Decimal             @db.Money
-  category_position category_position[]
-  position_option   position_option[]
+  id              Int               @id(map: "position_pk") @default(autoincrement())
+  name            String            @db.VarChar(30)
+  description     String?           @db.VarChar(200)
+  display_options Boolean
+  display_price   Boolean
+  price           Decimal           @db.Money
+  menu_position   menu_position[]
+  position_option position_option[]
 }
 
 model position_option {
   id          Int      @id(map: "position_option_pk") @default(autoincrement())
   option_id   Int
   position_id Int
-  amount      Int      @default(0)
   description String?  @db.VarChar(100)
   option      option   @relation(fields: [option_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "entity_1_position_option")
   position    position @relation(fields: [position_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "position_position_option")
 }
 
 model restaurant {
-  id                                                        Int                          @id(map: "restaurant_pk") @default(autoincrement())
-  formal_name                                               String
-  display_name                                              String                       @db.VarChar(30)
-  image_id                                                  Int?
-  restaurant_state_id                                       Int
-  image                                                     image[]
-  restaurant_state                                          restaurant_state             @relation(fields: [restaurant_state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_state")
-  restaurant_finance_data                                   restaurant_finance_data[]
-  restaurant_menu_restaurant_menu_restaurant_idTorestaurant restaurant_menu[]            @relation("restaurant_menu_restaurant_idTorestaurant")
-  restaurant_role                                           restaurant_role[]
-  restaurant_type_restaurant                                restaurant_type_restaurant[]
-  style                                                     style[]
+  id                                                             Int                          @id(map: "restaurant_pk") @default(autoincrement())
+  formal_name                                                    String
+  display_name                                                   String                       @db.VarChar(30)
+  image_id                                                       Int?
+  restaurant_state_id                                            Int
+  restaurant_menu_id                                             Int?
+  image                                                          image[]
+  restaurant_menu_restaurant_restaurant_menu_idTorestaurant_menu restaurant_menu?             @relation("restaurant_restaurant_menu_idTorestaurant_menu", fields: [restaurant_menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_menu")
+  restaurant_state                                               restaurant_state             @relation(fields: [restaurant_state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_state")
+  restaurant_finance_data                                        restaurant_finance_data[]
+  restaurant_menu_restaurant_menu_restaurant_idTorestaurant      restaurant_menu[]            @relation("restaurant_menu_restaurant_idTorestaurant")
+  restaurant_role                                                restaurant_role[]
+  restaurant_type_restaurant                                     restaurant_type_restaurant[]
+  style                                                          style[]
 }
 
 model restaurant_finance_data {
@@ -172,11 +151,12 @@ model restaurant_finance_data {
 }
 
 model restaurant_menu {
-  id                                                   Int        @id(map: "restaurant_menu_pk") @default(autoincrement())
-  menu_id                                              Int
-  restaurant_id                                        Int
-  menu                                                 menu       @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_menu")
-  restaurant_restaurant_menu_restaurant_idTorestaurant restaurant @relation("restaurant_menu_restaurant_idTorestaurant", fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_restaurant")
+  id                                                        Int          @id(map: "restaurant_menu_pk") @default(autoincrement())
+  menu_id                                                   Int
+  restaurant_id                                             Int
+  restaurant_restaurant_restaurant_menu_idTorestaurant_menu restaurant[] @relation("restaurant_restaurant_menu_idTorestaurant_menu")
+  menu                                                      menu         @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_menu")
+  restaurant_restaurant_menu_restaurant_idTorestaurant      restaurant   @relation("restaurant_menu_restaurant_idTorestaurant", fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_restaurant")
 }
 
 model restaurant_person {
@@ -232,26 +212,46 @@ model style {
   restaurant    restaurant @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "style_restaurant")
 }
 
+model menu_category {
+  id                 Int                  @id(map: "category_pk") @default(autoincrement())
+  name               String               @db.VarChar(30)
+  description        String?              @db.VarChar(30)
+  menu_category_menu menu_category_menu[]
+}
+
+model menu_position {
+  id                    Int                   @id(map: "category_position_pk") @default(autoincrement())
+  menu_category_menu_id Int
+  position_id           Int?
+  is_available          Boolean?
+  discount              discount[]
+  menu_category_menu    menu_category_menu    @relation(fields: [menu_category_menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu_position_menu")
+  position              position?             @relation(fields: [position_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "position_association_1")
+  order_menu_position   order_menu_position[]
+}
+
+model order_menu_position {
+  id               Int           @id(map: "order_category_position_pk") @default(autoincrement())
+  order_id         Int
+  menu_position_id Int
+  chosen_options   Int
+  order            order         @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_categories_order")
+  menu_position    menu_position @relation(fields: [menu_position_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_menu_position_menu_position_id_fk")
+}
+
+model menu_category_menu {
+  id            Int             @id(map: "menu_category_pk") @default(autoincrement())
+  menu_id       Int
+  category_id   Int
+  menu_category menu_category   @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "category_menu_category")
+  menu          menu            @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu_menu_category")
+  menu_position menu_position[]
+}
+
 model restaurant_type_restaurant {
   id                 Int             @id(map: "restaurant_restaurant_type_pk") @default(autoincrement())
   restaurant_type_id Int
   restaurant_id      Int
-  restaurant         restaurant      @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_type_restaurant")
-  restaurant_type    restaurant_type @relation(fields: [restaurant_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_type_restaurant_type")
-}
-
-model category_menu {
-  id                 Int                  @id(map: "category_pk") @default(autoincrement())
-  name               String               @db.VarChar(30)
-  category_position  category_position[]
-  menu_category_menu menu_category_menu[]
-}
-
-model menu_category_menu {
-  id            Int           @id(map: "menu_category_pk") @default(autoincrement())
-  category_id   Int
-  menu_id       Int
-  description   String?       @db.VarChar(300)
-  category_menu category_menu @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "category_menu_category")
-  menu          menu          @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu_menu_category")
+  restaurant         restaurant      @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_type_restaurant_restaurant_id_fk")
+  restaurant_type    restaurant_type @relation(fields: [restaurant_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_type_restaurant_restaurant_type_id_fk")
 }
