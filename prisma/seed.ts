@@ -1,5 +1,5 @@
-import {Prisma, PrismaClient} from '@prisma/client';
-import {create} from "node:domain";
+import {PrismaClient} from '@prisma/client';
+import {randomUUID} from "node:crypto";
 
 const prisma = new PrismaClient();
 
@@ -80,9 +80,14 @@ async function main() {
         await prisma.menu_type.deleteMany();
         // Insert sample data for `menu_types`
         await prisma.$transaction([
-            prisma.menu_type.create({data: {name: 'Breakfast'}}),
-            prisma.menu_type.create({data: {name: 'Lunch'}}),
-            prisma.menu_type.create({data: {name: 'Dinner'}}),
+            prisma.menu_type.create({data: {id:1,name: 'Default'}}),
+            prisma.menu_type.create({data: {id:2,name: 'Breakfast'}}),
+            prisma.menu_type.create({data: {id:3,name: 'Lunch'}}),
+            prisma.menu_type.create({data: {id:4,name: 'Dinner'}}),
+            prisma.menu_type.create({data: {id:5,name: 'Summer'}}),
+            prisma.menu_type.create({data: {id:6,name: 'Winter'}}),
+            prisma.menu_type.create({data: {id:7,name: 'Autumn'}}),
+            prisma.menu_type.create({data: {id:8,name: 'Spring'}}),
         ]);
     }
 
@@ -244,7 +249,7 @@ async function main() {
         ]);
     }
 
-    await prisma.$transaction([
+    const menuCategoryMenu = await prisma.$transaction([
         prisma.menu_category_menu.create({
             data:{
                 id:1,
@@ -572,7 +577,7 @@ async function main() {
         prisma.menu_position.create({
             data:{
                 id:1,
-                menu_category_menu_id:1,
+                menu_category_menu_id:menuCategoryMenu[0].id,
                 position_id:positions[0].id,
                 is_available:true
             }
@@ -580,8 +585,24 @@ async function main() {
         prisma.menu_position.create({
             data:{
                 id:2,
-                menu_category_menu_id:2,
-                position_id:restaurants[0].id,
+                menu_category_menu_id:menuCategoryMenu[0].id,
+                position_id:positions[1].id,
+                is_available:true
+            }
+        }),
+        prisma.menu_position.create({
+            data:{
+                id:3,
+                menu_category_menu_id:menuCategoryMenu[1].id,
+                position_id:positions[1].id,
+                is_available:true
+            }
+        }),
+        prisma.menu_position.create({
+            data:{
+                id:4,
+                menu_category_menu_id:menuCategoryMenu[1].id,
+                position_id:positions[2].id,
                 is_available:true
             }
         }),
@@ -596,22 +617,25 @@ async function main() {
         ]);
     }
 
-    type DiscountCreateInput = Omit<Prisma.discountUncheckedCreateInput, 'id' | 'code'>;
     // Insert sample data for `discounts`
-    const discountInputOne:DiscountCreateInput = {
+    const discountInputOne = {
+        id:1,
         start: new Date('2023-12-01'),
         end: new Date('2023-12-31'),
-        percentage: 15.5,
+        percentage: 6.0,
         menu_position_id: menuPositions[0].id,
-        discount_type_id: 1, // Seasonal Offer
+        discount_type_id: 1,
+        code:randomUUID()
     }
 
-    const discountInputTwo:DiscountCreateInput = {
+    const discountInputTwo = {
+        id:2,
         start: new Date('2024-01-01'),
         end: new Date('2024-01-31'),
         percentage: 10.0,
         menu_position_id: menuPositions[1].id,
         discount_type_id: 2, // Happy Hour
+        code:randomUUID()
     }
     await prisma.$transaction([
         prisma.discount.create({
