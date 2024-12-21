@@ -8,3 +8,8 @@ export const getPositionsData = async () => {
 export const getPositionData = async (id:number) => {
     return prisma.position.findUnique({where: {id:id}});
 }
+
+export const getRestoPositionsData = async (id:number) => {
+    // TODO: get all resto postions with categories, menus, discounts etc
+    return [];
+}
