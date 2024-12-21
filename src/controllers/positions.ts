@@ -1,7 +1,7 @@
 import {FastifyReply, FastifyRequest} from "fastify";
 import {RestoParams} from "../types/global";
 import {returnErrorMessage} from "../utils/errorHandlers";
-import {getPositionData, getPositionsData} from "../services/positions";
+import {getPositionData, getPositionsData, getRestoPositionsData} from "../services/positions";
 
 export const getAllPositions = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const positions = await getPositionsData()
@@ -18,4 +18,13 @@ export const getPositionById = async (request:FastifyRequest<{ Params: RestoPara
         reply.send(returnErrorMessage("No position found."));
     }
     reply.send({body:position,message:"Found position"});
+}
+
+export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    const {restoId} = request.params;
+    const positions = await getRestoPositionsData(Number(restoId));
+    if (!positions) {
+        reply.send(returnErrorMessage("No positions found."));
+    }
+    reply.send({body:positions,message:"Found positions"});
 }
