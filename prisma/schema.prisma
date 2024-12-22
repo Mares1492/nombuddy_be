@@ -126,20 +126,18 @@ model position_option {
 }
 
 model restaurant {
-  id                                                             Int                          @id(map: "restaurant_pk") @default(autoincrement())
-  formal_name                                                    String
-  display_name                                                   String                       @db.VarChar(30)
-  image_id                                                       Int?
-  restaurant_state_id                                            Int
-  restaurant_menu_id                                             Int?
-  image                                                          image[]
-  restaurant_menu_restaurant_restaurant_menu_idTorestaurant_menu restaurant_menu?             @relation("restaurant_restaurant_menu_idTorestaurant_menu", fields: [restaurant_menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_menu")
-  restaurant_state                                               restaurant_state             @relation(fields: [restaurant_state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_state")
-  restaurant_finance_data                                        restaurant_finance_data[]
-  restaurant_menu_restaurant_menu_restaurant_idTorestaurant      restaurant_menu[]            @relation("restaurant_menu_restaurant_idTorestaurant")
-  restaurant_role                                                restaurant_role[]
-  restaurant_type_restaurant                                     restaurant_type_restaurant[]
-  style                                                          style[]
+  id                                                        Int                          @id(map: "restaurant_pk") @default(autoincrement())
+  formal_name                                               String
+  display_name                                              String                       @db.VarChar(30)
+  image_id                                                  Int?
+  restaurant_state_id                                       Int
+  image                                                     image[]
+  restaurant_state                                          restaurant_state             @relation(fields: [restaurant_state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_state")
+  restaurant_finance_data                                   restaurant_finance_data[]
+  restaurant_menu_restaurant_menu_restaurant_idTorestaurant restaurant_menu[]            @relation("restaurant_menu_restaurant_idTorestaurant")
+  restaurant_role                                           restaurant_role[]
+  restaurant_type_restaurant                                restaurant_type_restaurant[]
+  style                                                     style[]
 }
 
 model restaurant_finance_data {
@@ -151,12 +149,11 @@ model restaurant_finance_data {
 }
 
 model restaurant_menu {
-  id                                                        Int          @id(map: "restaurant_menu_pk") @default(autoincrement())
-  menu_id                                                   Int
-  restaurant_id                                             Int
-  restaurant_restaurant_restaurant_menu_idTorestaurant_menu restaurant[] @relation("restaurant_restaurant_menu_idTorestaurant_menu")
-  menu                                                      menu         @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_menu")
-  restaurant_restaurant_menu_restaurant_idTorestaurant      restaurant   @relation("restaurant_menu_restaurant_idTorestaurant", fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_restaurant")
+  id                                                   Int        @id(map: "restaurant_menu_pk") @default(autoincrement())
+  menu_id                                              Int
+  restaurant_id                                        Int
+  menu                                                 menu       @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_menu")
+  restaurant_restaurant_menu_restaurant_idTorestaurant restaurant @relation("restaurant_menu_restaurant_idTorestaurant", fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_restaurant")
 }
 
 model restaurant_person {
