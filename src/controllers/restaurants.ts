@@ -3,7 +3,7 @@ import {FastifyReply, FastifyRequest} from "fastify";
 import type {RestoParams} from "../types/global";
 import {prisma} from "../index";
 
-export const getRestaurants = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+export const getAllRestaurants = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     // Fetch all restaurants
     const restaurants = await prisma.restaurant.findMany();
     //reply.send(restaurants.map(({formal_name,display_name}) => ({formal_name,display_name})));
