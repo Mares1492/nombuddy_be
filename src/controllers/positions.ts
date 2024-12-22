@@ -1,5 +1,5 @@
 import {FastifyReply, FastifyRequest} from "fastify";
-import {RestoParams} from "../types/global";
+import {RestaurantMenuData, RestoParams} from "../types/global";
 import {returnErrorMessage} from "../utils/errorHandlers";
 import {getPositionData, getPositionsData, getRestoPositionsData} from "../services/positions";
 
@@ -21,9 +21,9 @@ export const getPositionById = async (request:FastifyRequest<{ Params: RestoPara
 }
 
 export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const {restoId} = request.params;
-    const positions = await getRestoPositionsData(Number(restoId));
-    if (!positions) {
+    const {id} = request.params;
+    const positions:RestaurantMenuData[] = await getRestoPositionsData(Number(id));
+    if (!positions.length) {
         reply.send(returnErrorMessage("No positions found."));
     }
     reply.send({body:positions,message:"Found positions"});
