@@ -29,9 +29,9 @@ const applyDaytimeDiscounts = (positions:RestaurantMenuData[]) => {
 
 export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const {id} = request.params;
-    const positions:RestaurantMenuData[] = await getRestoPositionsData(Number(id));
+    let positions:RestaurantMenuData[] = await getRestoPositionsData(Number(id));
     // Business discount
-    const positions = await applyDaytimeDiscounts(positions);
+    positions = await applyDaytimeDiscounts(positions);
     if (!positions.length) {
         reply.send(returnErrorMessage("No positions found."));
     }
