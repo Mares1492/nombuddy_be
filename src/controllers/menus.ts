@@ -65,8 +65,9 @@ export const deleteMenuById = async (request:FastifyRequest<{ Params: RestoParam
     reply.send({body:menu,message:"Has been deleted"});
 }
 
-export const createNewMenu = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+export const createNewMenu = async (request:FastifyRequest<{ Params: RestoParams, Body:RestoMenu }>, reply:FastifyReply) => {
     const { id } = request.params;
-    // Example: const newMenu = await prisma.menu.create({ data: { ...request.body, restaurantName: restoName } });
+    //TODO: validate body data
+    const newMenu = await prisma.menu.create({ data: request.body});
     return {body:{},message:`Added new menu for restaurant ${id}`};
 };
