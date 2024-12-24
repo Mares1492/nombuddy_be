@@ -69,5 +69,6 @@ export const createNewMenu = async (request:FastifyRequest<{ Params: RestoParams
     const { id } = request.params;
     //TODO: validate body data
     const newMenu = await prisma.menu.create({ data: request.body});
+    //TODO: create new restaurant_menu connection
     return {body:newMenu,message:`Added new menu for restaurant ${id}`};
 };
