@@ -20,9 +20,18 @@ export const getPositionById = async (request:FastifyRequest<{ Params: RestoPara
     reply.send({body:position,message:"Found position"});
 }
 
+const applyDaytimeDiscounts = (positions:RestaurantMenuData[]) => {
+    for (const position of positions) {
+        //
+    }
+    return positions;
+}
+
 export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const {id} = request.params;
     const positions:RestaurantMenuData[] = await getRestoPositionsData(Number(id));
+    // Business discount
+    const positions = await applyDaytimeDiscounts(positions);
     if (!positions.length) {
         reply.send(returnErrorMessage("No positions found."));
     }
