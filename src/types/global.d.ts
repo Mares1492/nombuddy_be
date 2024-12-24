@@ -12,11 +12,19 @@ interface Discount {
     end: string; // DateTime, stored as string
 }
 
-interface MenuPosition {
+interface Position {
     id: number;
     name: string;
-    description: string | null; // Can be null
-    price: string; // Using string for monetary values (as Decimal in DB)
+    description: string;
+    display_price: boolean;
+    display_options: boolean;
+    price: number;
+}
+
+interface MenuPosition {
+    id: number;
+    menu_category_menu_id:number;
+    position_id: number;
     isAvailable: boolean;
 }
 
