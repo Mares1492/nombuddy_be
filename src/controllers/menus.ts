@@ -1,6 +1,6 @@
 // Routes for /restaurants/menus
 import {FastifyReply, FastifyRequest} from "fastify";
-import {RestoMenu, RestoParams} from "../types/global";
+import {CreateMenuBody, RestoMenu, RestoParams} from "../types/global";
 import {prisma} from "../index";
 import {getRestaurantMenus} from "../services/menus";
 import {returnErrorMessage} from "../utils/errorHandlers";
@@ -65,10 +65,14 @@ export const deleteMenuById = async (request:FastifyRequest<{ Params: RestoParam
     reply.send({body:menu,message:"Has been deleted"});
 }
 
-export const createNewMenu = async (request:FastifyRequest<{ Params: RestoParams, Body:RestoMenu }>, reply:FastifyReply) => {
+export const createNewMenu = async (request:FastifyRequest<{ Params: RestoParams, Body:CreateMenuBody }>, reply:FastifyReply) => {
     const { id } = request.params;
-    //TODO: validate body data
-    const newMenu = await prisma.menu.create({ data: request.body});
+    /*TODO:
+       - validate body data
+       - consider using transactions
+     */
+    const newMenu = await prisma.menu.create({ data: request.body.resto_menu});
+    const newMenuCategoryMenu = await prisma.menu_category_menu.create({data:{menu_id:newMenu.id,category_id:request.body.menu_category_id}})
     //TODO: create new restaurant_menu connection
     return {body:newMenu,message:`Added new menu for restaurant ${id}`};
 };
