@@ -1,5 +1,5 @@
 import {FastifyReply, FastifyRequest} from "fastify";
-import {MenuPosition, Position, RestaurantMenuData, RestoParams} from "../types/global";
+import {CreatePositionBody, MenuPosition, Position, RestaurantMenuData, RestoParams} from "../types/global";
 import {returnErrorMessage} from "../utils/errorHandlers";
 import {getPositionData, getPositionsData, getRestoPositionsData} from "../services/positions";
 import {prisma} from "../index";
@@ -39,10 +39,13 @@ export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: Res
     reply.send({body:positions,message:"Found positions"});
 }
 
-export const createNewPosition = async (request:FastifyRequest<{ Params: RestoParams, Body: Position }>, reply:FastifyReply) => {
-    const {id, menuId} = request.params;
-    const newPosition = await prisma.position.create({ data: request.body});
-    // TODO: add new menu position 
-    const newMenuPosition = await prisma.menu_position.create({data: {}})
+export const createNewPosition = async (request:FastifyRequest<{ Params: RestoParams, Body: CreatePositionBody }>, reply:FastifyReply) => {
+    const newPosition = await prisma.position.create({ data: request.body.position_data});
+    /*TODO:
+       - validate body data
+       - consider using transactions
+     */
+    const newMenuPosition = await prisma.menu_position.create({data: {menu_category_menu_id:request.body.menu_category_id,position_id:newPosition.id}})
+    reply.send({body:{},message:"Created new position"});
 
 }
