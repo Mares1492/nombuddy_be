@@ -4,5 +4,5 @@ import {createNewPosition, getAllPositions, getPositionById} from "../../control
 export default async (fastify: FastifyInstance) => {
     fastify.get('/',getAllPositions)
     fastify.get('/:posId',getPositionById)
-    fastify.post('/menuId',createNewPosition)
+    fastify.post('/',createNewPosition)
 }
