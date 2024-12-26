@@ -67,6 +67,7 @@ interface RestaurantMenuData {
 
 
 export interface RestoParams {
+    menuCatId: number;
     restoId: number;
     menuId: number;
     posId: number;
