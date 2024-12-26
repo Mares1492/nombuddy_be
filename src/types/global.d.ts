@@ -1,4 +1,10 @@
-export interface RestoMenu {
+interface CreateMenuBody {
+    resto_menu: RestoMenu;
+    menu_category_id: number;
+
+}
+
+interface RestoMenu {
     id: number;
     name: string;
     menu_type_id: number;
@@ -10,6 +16,11 @@ interface Discount {
     percentage: string; // Using string for the percentage as it's typically a Decimal in databases
     start: string; // DateTime, stored as string
     end: string; // DateTime, stored as string
+}
+
+interface CreatePositionBody {
+    position_data: Position;
+    menu_category_id: number;
 }
 
 interface Position {
