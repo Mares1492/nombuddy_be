@@ -13,8 +13,8 @@ export const getAllPositions = async (request:FastifyRequest<{ Params: RestoPara
 };
 
 export const getPositionById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const {posId} = request.params;
-    const position = await getPositionData(Number(posId));
+    const {id} = request.params;
+    const position = await getPositionData(Number(id));
     if (!position) {
         reply.send(returnErrorMessage("No position found."));
     }
@@ -40,12 +40,32 @@ export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: Res
 }
 
 export const createNewPosition = async (request:FastifyRequest<{ Params: RestoParams, Body: CreatePositionBody }>, reply:FastifyReply) => {
-    const newPosition = await prisma.position.create({ data: request.body.position_data});
+    if (request.body.menu_category_menu_id === null || isNaN(request.body.menu_category_menu_id)) {
+        reply.send(returnErrorMessage(`Received a wrong menu category id: ${request.body.menu_category_menu_id}`));
+    }
+    const newPosition = await prisma.position.create({ data: request.body.position_data})
+        .then(async (position) => {
+            await prisma.menu_position.create({
+                data: {
+                    menu_category_menu_id: Number(request.body.menu_category_menu_id),
+                    position_id: position.id
+                }
+            }).catch((err) => {
+                reply.send(returnErrorMessage("Created position without linking it to menu",err.statusCode,position));
+            })
+            return position
+        })
+        .catch(()=>{
+            reply.send(returnErrorMessage("Position was not created"));
+        })
+
     /*TODO:
        - validate body data
        - consider using transactions
      */
-    const newMenuPosition = await prisma.menu_position.create({data: {menu_category_menu_id:request.body.menu_category_id,position_id:newPosition.id}})
     reply.send({body:{},message:"Created new position"});
+    reply.send({body:newPosition,message:"Created new position"});
+
+}
 
 }
