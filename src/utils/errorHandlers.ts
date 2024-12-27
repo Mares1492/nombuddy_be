@@ -1,1 +1,1 @@
-export const returnErrorMessage = (message:string) => ({body:{},message:message});
+export const returnErrorMessage = (message:string,errorCode:number=500,body={}) => ({body,errorCode,message:message});
