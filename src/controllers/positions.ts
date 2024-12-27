@@ -1,7 +1,7 @@
 import {FastifyReply, FastifyRequest} from "fastify";
 import {CreatePositionBody, MenuPosition, Position, RestaurantMenuData, RestoParams} from "../types/global";
 import {returnErrorMessage} from "../utils/errorHandlers";
-import {getPositionData, getPositionsData, getRestoPositionsData} from "../services/positions";
+import {deletePosition, getPositionData, getPositionsData, getRestoPositionsData} from "../services/positions";
 import {prisma} from "../index";
 
 export const getAllPositions = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
@@ -54,7 +54,7 @@ export const getPositionById = async (request:FastifyRequest<{ Params: RestoPara
     const {id} = request.params;
     const position = await getPositionData(Number(id));
     if (!position) {
-        reply.send(returnErrorMessage("No position found."));
+        reply.send(returnErrorMessage(`No position found with id: ${id}`,404));
     }
     reply.send({body:position,message:"Found position"});
 }
@@ -72,12 +72,11 @@ export const deletePositionById = async (request:FastifyRequest<{ Params: RestoP
     if (!position) {
         reply.send(returnErrorMessage("No position found.",404));
     }
-    //TODO: move to service lvl
-    await prisma.menu_position.deleteMany({where:{position_id:Number(id)}})
-    // TODO: check if has right to do so
-    await prisma.position.delete({ where: { id:Number(id) } }).catch((err) => {
-        //TODO: err.message should only be send to trusted source
-        reply.send(returnErrorMessage(err.message,err.statusCode));
-    });
+    try {
+       await deletePosition(Number(id));
+    }
+    catch(err) {
+        reply.send(returnErrorMessage("Could not delete position",500));
+    }
     reply.send({body:position,message:`Deleted position: ${id}`});
 }
