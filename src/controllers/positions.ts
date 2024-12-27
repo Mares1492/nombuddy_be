@@ -49,7 +49,6 @@ export const createNewPosition = async (request:FastifyRequest<{ Params: RestoPa
 
 }
 
-
 export const getPositionById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const {id} = request.params;
     const position = await getPositionData(Number(id));
@@ -68,6 +67,7 @@ export const updatePositionById = async (request:FastifyRequest<{ Params: RestoP
 
 export const deletePositionById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const {id} = request.params;
+    // TODO: check if has right to do so
     const position = await prisma.position.findUnique({where:{id:Number(id)}})
     if (!position) {
         reply.send(returnErrorMessage("No position found.",404));

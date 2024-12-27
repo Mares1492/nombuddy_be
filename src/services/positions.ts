@@ -61,8 +61,6 @@ export const getRestoPositionsData = async (id:number) => {
 
 export const deletePosition = async (id:number) => {
     const deleteMenuPositions = prisma.menu_position.deleteMany({where: {position_id: id}});
-    // TODO: check if has right to do so
     const deletePosition = prisma.position.delete({where: {id: id}});
-    //TODO: err.message should only be send to trusted source});
     await prisma.$transaction([deleteMenuPositions, deletePosition]);
 }
