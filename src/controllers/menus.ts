@@ -26,25 +26,25 @@ export const getAllRestaurantMenusById = async (request:FastifyRequest<{ Params:
 };
 
 export const getMenuById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const { menuId } = request.params;
+    const { id } = request.params;
     const menu:RestoMenu|null = await prisma.menu.findUnique({
         where:{
-            id: Number(menuId)
+            id: Number(id)
         }
     });
     if (!menu) {
-        reply.send(returnErrorMessage(`No menu found with given id-${menuId}`));
+        reply.send(returnErrorMessage(`No menu found with given id-${id}`));
     }
     reply.send({body:menu,message:"Menu found"});
 };
 
 export const updateMenuById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const { menuId } = request.params;
+    const { id } = request.params;
     const menu = await prisma.menu.findUnique({
-        where: {id: Number(menuId)}
+        where: {id: Number(id)}
     })
     if (!menu) {
-        reply.send(returnErrorMessage(`No menu found with given id-${menuId}`));
+        reply.send(returnErrorMessage(`No menu found with given id-${id}`));
     }
     // TODO: get updated data from body
     // TODO: check if has right to do updates
@@ -54,12 +54,12 @@ export const updateMenuById = async (request:FastifyRequest<{ Params: RestoParam
 }
 
 export const deleteMenuById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const { menuId } = request.params;
+    const { id } = request.params;
     const menu = await prisma.menu.findUnique({
-        where: {id: Number(menuId)}
+        where: {id: Number(id)}
     })
     if (!menu) {
-        reply.send(returnErrorMessage(`No menu found with given id-${Number(menuId)}`));
+        reply.send(returnErrorMessage(`No menu found with given id-${Number(id)}`));
     }
     // TODO: delete menu
     reply.send({body:menu,message:"Has been deleted"});
