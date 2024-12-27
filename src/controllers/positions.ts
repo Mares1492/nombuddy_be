@@ -63,9 +63,22 @@ export const createNewPosition = async (request:FastifyRequest<{ Params: RestoPa
        - validate body data
        - consider using transactions
      */
-    reply.send({body:{},message:"Created new position"});
     reply.send({body:newPosition,message:"Created new position"});
 
 }
 
+export const deletePositionById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    const {id} = request.params;
+    const position = await prisma.position.findUnique({where:{id:Number(id)}})
+    if (!position) {
+        reply.send(returnErrorMessage("No position found.",404));
+    }
+    //TODO: move to service lvl
+    await prisma.menu_position.deleteMany({where:{position_id:Number(id)}})
+    // TODO: check if has right to do so
+    await prisma.position.delete({ where: { id:Number(id) } }).catch((err) => {
+        //TODO: err.message should only be send to trusted source
+        reply.send(returnErrorMessage(err.message,err.statusCode));
+    });
+    reply.send({body:position,message:`Deleted position: ${id}`});
 }
