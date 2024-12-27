@@ -12,27 +12,9 @@ export const getAllPositions = async (request:FastifyRequest<{ Params: RestoPara
     reply.send({body:positions,message:"Found positions"});
 };
 
-export const getPositionById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const {id} = request.params;
-    const position = await getPositionData(Number(id));
-    if (!position) {
-        reply.send(returnErrorMessage("No position found."));
-    }
-    reply.send({body:position,message:"Found position"});
-}
-
-const applyDaytimeDiscounts = (positions:RestaurantMenuData[]) => {
-    for (const position of positions) {
-        // business logic example
-    }
-    return positions;
-}
-
 export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const {id} = request.params;
     let positions:RestaurantMenuData[] = await getRestoPositionsData(Number(id));
-    // Business discount
-    positions = await applyDaytimeDiscounts(positions);
     if (!positions.length) {
         reply.send(returnErrorMessage("No positions found."));
     }
@@ -65,6 +47,23 @@ export const createNewPosition = async (request:FastifyRequest<{ Params: RestoPa
      */
     reply.send({body:newPosition,message:"Created new position"});
 
+}
+
+
+export const getPositionById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    const {id} = request.params;
+    const position = await getPositionData(Number(id));
+    if (!position) {
+        reply.send(returnErrorMessage("No position found."));
+    }
+    reply.send({body:position,message:"Found position"});
+}
+
+export const updatePositionById = async (request:FastifyRequest<{ Params: RestoParams, Body:Position }>, reply:FastifyReply) => {
+    const {id} = request.params;
+    // TODO: check if requester has right to update position
+    const updatedPosition = await prisma.position.update({where:{id:Number(id)},data:request.body})
+    reply.send({body:updatedPosition,message:"Position updated"});
 }
 
 export const deletePositionById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
