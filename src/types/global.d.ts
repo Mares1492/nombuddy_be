@@ -20,7 +20,7 @@ interface Discount {
 
 interface CreatePositionBody {
     position_data: Position;
-    menu_category_id: number;
+    menu_category_menu_id: number;
 }
 
 interface Position {
