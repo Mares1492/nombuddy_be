@@ -51,13 +51,9 @@ interface Menu {
 
 interface Restaurant {
     id: number;
-    restaurantId: number;
-    menu: Menu;
-    category: MenuCategory;
-    position: MenuPosition;
-    discount?: Discount; // Discount is optional because some positions might not have a discount
     formal_name: string;
     display_name: string;
+    image_id: number;
     restaurant_state_id: number;
 }
 
