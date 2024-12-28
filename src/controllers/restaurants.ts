@@ -21,9 +21,8 @@ export const createRestaurant = async (request:FastifyRequest<{ Params: RestoPar
 
 // Routes for a specific restaurant by id
 export const getRestaurantById =  async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const { restoId } = request.params;
-    const id = Number(restoId)
-    const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
+    const { id } = request.params;
+    const restaurant = await prisma.restaurant.findFirst({ where: { id:Number(id) } });
     if (!restaurant) {
         return reply.send({body:{},message:"No restaurant found"});
     }
@@ -31,9 +30,8 @@ export const getRestaurantById =  async (request:FastifyRequest<{ Params: RestoP
 };
 
 export const updateRestaurantById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const {restoId} = request.params
-    const id = Number(restoId)
-    const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
+    const {id} = request.params
+    const restaurant = await prisma.restaurant.findFirst({ where: { id:Number(id) } });
     if (!restaurant) {
         return reply.send({body:{},message:"No restaurant found"});
     }
@@ -43,9 +41,8 @@ export const updateRestaurantById = async (request:FastifyRequest<{ Params: Rest
 }
 
 export const deleteRestaurantById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    const {restoId} = request.params;
-    const id = Number(restoId);
-    const restaurant = await prisma.restaurant.findFirst({ where: { id:id } });
+    const {id} = request.params;
+    const restaurant = await prisma.restaurant.delete({ where: { id:Number(id) } });
     if (!restaurant) {
         return {body:{},message:"No restaurant found"};
     }
