@@ -130,7 +130,7 @@ model restaurant {
   formal_name                                               String
   display_name                                              String                       @db.VarChar(30)
   image_id                                                  Int?
-  restaurant_state_id                                       Int
+  restaurant_state_id                                       Int                          @default(2)
   image                                                     image[]
   restaurant_state                                          restaurant_state             @relation(fields: [restaurant_state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_restaurant_state")
   restaurant_finance_data                                   restaurant_finance_data[]
@@ -220,7 +220,7 @@ model menu_position {
   id                    Int                   @id(map: "category_position_pk") @default(autoincrement())
   menu_category_menu_id Int
   position_id           Int?
-  is_available          Boolean?
+  is_available          Boolean               @default(true)
   discount              discount[]
   menu_category_menu    menu_category_menu    @relation(fields: [menu_category_menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu_position_menu")
   position              position?             @relation(fields: [position_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "position_association_1")
