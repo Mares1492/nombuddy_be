@@ -56,6 +56,9 @@ interface Restaurant {
     category: MenuCategory;
     position: MenuPosition;
     discount?: Discount; // Discount is optional because some positions might not have a discount
+    formal_name: string;
+    display_name: string;
+    restaurant_state_id: number;
 }
 
 // Main response type that will hold all restaurant related information
