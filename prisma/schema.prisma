@@ -152,6 +152,8 @@ model restaurant_menu {
   id                                                   Int        @id(map: "restaurant_menu_pk") @default(autoincrement())
   menu_id                                              Int
   restaurant_id                                        Int
+  refresh_token                                        String?
+  access_token                                         String?
   menu                                                 menu       @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_menu")
   restaurant_restaurant_menu_restaurant_idTorestaurant restaurant @relation("restaurant_menu_restaurant_idTorestaurant", fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_menu_restaurant")
 }
@@ -170,6 +172,7 @@ model restaurant_role {
   restaurant_id       Int
   discount_code       String              @db.Uuid
   discount_percentage Decimal             @db.Decimal
+  is_admin            Boolean?            @default(false)
   restaurant_person   restaurant_person[]
   restaurant          restaurant          @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_role_restaurant")
   role                role                @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "restaurant_role_role")
@@ -191,7 +194,6 @@ model role {
   id              Int               @id(map: "role_pk") @default(autoincrement())
   name            String            @db.VarChar(50)
   description     String            @db.VarChar(300)
-  is_admin        Boolean
   restaurant_role restaurant_role[]
 }
 
