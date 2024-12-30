@@ -22,7 +22,8 @@ export const createRestaurant = async (request:FastifyRequest<{ Params: RestoPar
             discount_code: crypto.randomUUID()
     }})
     const newRestaurantPerson = await prisma.restaurant_person.create({data:{
-            //...
+            person_id: request.body.admin_id,
+            restaurant_role_id: newRestaurantRole.id,
     }})
     // TODO: create additional references
     return reply.send({body:newRestaurant,message:"New restaurant has been created"});
