@@ -49,6 +49,11 @@ interface Menu {
     name: string;
 }
 
+interface CreateRestaurantBody {
+    restaurant_data:Restaurant;
+    admin_id: number;
+}
+
 interface Restaurant {
     id: number;
     formal_name: string;
