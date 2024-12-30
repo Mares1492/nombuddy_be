@@ -22,8 +22,12 @@ export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: Res
 }
 
 export const createNewPosition = async (request:FastifyRequest<{ Params: RestoParams, Body: CreatePositionBody }>, reply:FastifyReply) => {
-    if (request.body.menu_category_menu_id === null || isNaN(request.body.menu_category_menu_id)) {
-        reply.send(returnErrorMessage(`Received a wrong menu category id: ${request.body.menu_category_menu_id}`));
+    if (typeof request.body.menu_category_menu_id !== 'number') {
+        reply.send(returnErrorMessage(`Received a wrong menu category menu id: ${request.body.menu_category_menu_id}`));
+    }
+    const menuCategoryMenu = await prisma.menu_category_menu.findUnique({where:{id:Number(request.body.menu_category_menu_id)}});
+    if (!menuCategoryMenu){
+        reply.send(returnErrorMessage(`Menu category menu with id: ${request.body.menu_category_menu_id}, does not exist`,404));
     }
     const newPosition = await prisma.position.create({ data: request.body.position_data})
         .then(async (position) => {
