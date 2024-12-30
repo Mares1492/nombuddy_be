@@ -1,6 +1,6 @@
 // Routes for /restaurants
 import {FastifyReply, FastifyRequest} from "fastify";
-import type {Restaurant, RestoParams} from "../types/global";
+import type {CreateRestaurantBody, Restaurant, RestoParams} from "../types/global";
 import {prisma} from "../index";
 
 export const getAllRestaurants = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
@@ -10,10 +10,20 @@ export const getAllRestaurants = async (request:FastifyRequest<{ Params: RestoPa
     reply.send({body: restaurants,message:"Restaurants found"});
 };
 
-export const createRestaurant = async (request:FastifyRequest<{ Params: RestoParams, Body:Restaurant }>, reply:FastifyReply) => {
+export const createRestaurant = async (request:FastifyRequest<{ Params: RestoParams, Body:CreateRestaurantBody }>, reply:FastifyReply) => {
     // Add a new restaurant
     // TODO: check input data
-    const newRestaurant = await prisma.restaurant.create({ data: request.body });
+    const newRestaurant = await prisma.restaurant.create({ data: request.body.restaurant_data });
+    const newRestaurantRole = await prisma.restaurant_role.create({data: {
+            restaurant_id:newRestaurant.id,
+            role_id: 3, //Manager
+            is_admin: true,
+            discount_percentage:50,
+            discount_code: crypto.randomUUID()
+    }})
+    const newRestaurantPerson = await prisma.restaurant_person.create({data:{
+            //...
+    }})
     // TODO: create additional references
     return reply.send({body:newRestaurant,message:"New restaurant has been created"});
 };
