@@ -47,6 +47,18 @@ async function main() {
         }
     );
 
+    const orderStateCount = await prisma.order_state.count();
+    if (orderStateCount !== 6 ) {
+        await prisma.order_state.createMany({data:[
+                {id:1,name:"pending"},
+                {id:2,name:"accepted"},
+                {id:3,name:"in progress"},
+                {id:4,name:"ready"},
+                {id:5,name:"served"},
+                {id:6,name:"deleted"}
+        ]})
+    }
+
     // Insert sample data for `restaurants`
     const restaurants = await prisma.$transaction([
         prisma.restaurant.create({
