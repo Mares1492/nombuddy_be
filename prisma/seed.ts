@@ -19,6 +19,7 @@ async function main() {
         'restaurant_type_restaurant',
         'menu',
         'restaurant',
+        'role'
     ];
 
     for (const model of models) {
@@ -36,6 +37,15 @@ async function main() {
             prisma.restaurant_state.create({data: {name: 'Rush'}}),
         ]);
     }
+
+    await prisma.role.createMany(
+        {
+            data:[
+                {id:1, name:"Admin",description:"The Boss"},
+                {id:2, name:"Worker",description: "Nobody"}
+            ]
+        }
+    );
 
     // Insert sample data for `restaurants`
     const restaurants = await prisma.$transaction([
