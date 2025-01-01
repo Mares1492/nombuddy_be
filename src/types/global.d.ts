@@ -51,7 +51,7 @@ interface Menu {
 
 interface CreateRestaurantBody {
     restaurant_data:Restaurant;
-    admin_id: number;
+    creators_person_id: number;
 }
 
 interface Restaurant {
@@ -87,6 +87,6 @@ export interface RestoParams {
     menuId: number;
     posId: number;
     restoName: string;
-    id?: string;
+    id: number;
 }
 
