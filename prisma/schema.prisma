@@ -100,8 +100,8 @@ model order_state {
 
 model person {
   id                Int                 @id(map: "person_pk") @default(autoincrement())
-  name              Int
-  email             String              @db.VarChar(100)
+  name              String              @db.VarChar(100)
+  email             String              @db.VarChar(120)
   restaurant_person restaurant_person[]
 }
 
