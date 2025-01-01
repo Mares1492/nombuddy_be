@@ -193,7 +193,7 @@ model restaurant_type {
 model role {
   id              Int               @id(map: "role_pk") @default(autoincrement())
   name            String            @db.VarChar(50)
-  description     String            @db.VarChar(300)
+  description     String?           @db.VarChar(300)
   restaurant_role restaurant_role[]
 }
 
@@ -239,12 +239,12 @@ model order_menu_position {
 }
 
 model menu_category_menu {
-  id            Int             @id(map: "menu_category_pk") @default(autoincrement())
-  menu_id       Int
-  category_id   Int
-  menu_category menu_category   @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "category_menu_category")
-  menu          menu            @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu_menu_category")
-  menu_position menu_position[]
+  id               Int             @id(map: "menu_category_pk") @default(autoincrement())
+  menu_id          Int
+  menu_category_id Int
+  menu_category    menu_category   @relation(fields: [menu_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "category_menu_category")
+  menu             menu            @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "menu_menu_category")
+  menu_position    menu_position[]
 }
 
 model restaurant_type_restaurant {
