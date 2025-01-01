@@ -37,7 +37,7 @@ async function main() {
             prisma.restaurant_state.create({data: {name: 'Rush'}}),
         ]);
     }
-
+    
     await prisma.role.createMany(
         {
             data:[

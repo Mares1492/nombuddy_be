@@ -1,6 +1,6 @@
 // Routes for /restaurants
 import {FastifyReply, FastifyRequest} from "fastify";
-import type {CreateRestaurantBody, Restaurant, RestoParams} from "../types/global";
+import type {CreateRestaurantBody, RestoParams} from "../types/global";
 import {prisma} from "../index";
 
 export const getAllRestaurants = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {

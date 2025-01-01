@@ -12,7 +12,7 @@ export const getAllPositions = async (request:FastifyRequest<{ Params: RestoPara
     reply.send({body:positions,message:"Found positions"});
 };
 
-export const getPositionsByRestoId = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+export const getAllRestaurantPositions = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const {id} = request.params;
     let positions:RestaurantMenuData[] = await getRestoPositionsData(Number(id));
     if (!positions.length) {

@@ -1,6 +1,6 @@
 import {FastifyInstance} from "fastify";
-import {getPositionsByRestoId} from "../../../../controllers/positions";
+import {getAllRestaurantPositions} from "../../../../controllers/positions";
 
 export default async (fastify: FastifyInstance) => {
-    fastify.get('/', getPositionsByRestoId);
+    fastify.get('/', getAllRestaurantPositions);
 }
