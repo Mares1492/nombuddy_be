@@ -14,7 +14,7 @@ export const getAllMenus = async (request:FastifyRequest<{ Params: RestoParams }
 };
 
 
-export const getAllRestaurantMenusById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+export const getAllRestaurantMenus = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const { id } = request.params;
     // TODO: create input validator
     // getRestaurantMenus from menus service
@@ -66,13 +66,14 @@ export const deleteMenuById = async (request:FastifyRequest<{ Params: RestoParam
 }
 
 export const createNewMenu = async (request:FastifyRequest<{ Params: RestoParams, Body:CreateMenuBody }>, reply:FastifyReply) => {
+    //restaurant id
     const { id } = request.params;
     /*TODO:
        - validate body data
        - consider using transactions
      */
     const newMenu = await prisma.menu.create({ data: request.body.resto_menu});
-    const newMenuCategoryMenu = await prisma.menu_category_menu.create({data:{menu_id:newMenu.id,category_id:request.body.menu_category_id}})
+    const newMenuCategoryMenu = await prisma.menu_category_menu.create({data:{menu_id:newMenu.id,menu_category_id:request.body.menu_category_id}})
     //TODO: create new restaurant_menu connection
     return {body:newMenu,message:`Added new menu for restaurant ${id}`};
 };

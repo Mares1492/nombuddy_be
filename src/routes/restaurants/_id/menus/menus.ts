@@ -1,10 +1,10 @@
 import {FastifyInstance} from "fastify";
 import {
     createNewMenu,
-    getAllRestaurantMenusById,
+    getAllRestaurantMenus,
 } from "../../../../controllers/menus";
 
 export default async (fastify: FastifyInstance) => {
-    fastify.get('/', getAllRestaurantMenusById);
+    fastify.get('/', getAllRestaurantMenus);
     fastify.post('/', createNewMenu);
 }
