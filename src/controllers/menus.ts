@@ -4,6 +4,7 @@ import {CreateMenuBody, RestoMenu, RestoParams} from "../types/global";
 import {prisma} from "../index";
 import {getRestaurantMenus} from "../services/menus";
 import {returnErrorMessage} from "../utils/errorHandlers";
+import {isNumber} from "../utils/validators";
 
 export const getAllMenus = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const menus = await prisma.menu.findMany();
@@ -68,12 +69,18 @@ export const deleteMenuById = async (request:FastifyRequest<{ Params: RestoParam
 export const createNewMenu = async (request:FastifyRequest<{ Params: RestoParams, Body:CreateMenuBody }>, reply:FastifyReply) => {
     //restaurant id
     const { id } = request.params;
+    if (!isNumber(id)) {
+        reply.send(returnErrorMessage(`Provided restaurant id:${id}, failed validation`));
+    }
+    if (!isNumber(request.body.menu_category_id)){
+        reply.send(returnErrorMessage(`Provided menu category id:${request.body.menu_category_id}, failed validation`));
+    }
     /*TODO:
        - validate body data
        - consider using transactions
      */
     const newMenu = await prisma.menu.create({ data: request.body.resto_menu});
-    const newMenuCategoryMenu = await prisma.menu_category_menu.create({data:{menu_id:newMenu.id,menu_category_id:request.body.menu_category_id}})
-    //TODO: create new restaurant_menu connection
+    const newMenuCategoryMenu = await prisma.menu_category_menu.create({data:{menu_id:newMenu.id,menu_category_id:request.body.menu_category_id}});
+    const newRestaurantMenu = await prisma.restaurant_menu.create({data:{restaurant_id:Number(id),menu_id:newMenu.id}});
     return {body:newMenu,message:`Added new menu for restaurant ${id}`};
 };
