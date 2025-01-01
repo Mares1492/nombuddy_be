@@ -3,6 +3,7 @@ import {CreatePositionBody, MenuPosition, Position, RestaurantMenuData, RestoPar
 import {returnErrorMessage} from "../utils/errorHandlers";
 import {deletePosition, getPositionData, getPositionsData, getRestoPositionsData} from "../services/positions";
 import {prisma} from "../index";
+import {isNumber} from "../utils/validators";
 
 export const getAllPositions = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
     const positions = await getPositionsData()
@@ -22,7 +23,7 @@ export const getAllRestaurantPositions = async (request:FastifyRequest<{ Params:
 }
 
 export const createNewPosition = async (request:FastifyRequest<{ Params: RestoParams, Body: CreatePositionBody }>, reply:FastifyReply) => {
-    if (typeof request.body.menu_category_menu_id !== 'number') {
+    if (!isNumber(request.body.menu_category_menu_id)) {
         reply.send(returnErrorMessage(`Received a wrong menu category menu id: ${request.body.menu_category_menu_id}`));
     }
     const menuCategoryMenu = await prisma.menu_category_menu.findUnique({where:{id:Number(request.body.menu_category_menu_id)}});
