@@ -1,5 +1,5 @@
 import {FastifyReply, FastifyRequest} from "fastify";
-import {CreatePositionBody, MenuPosition, Position, RestaurantMenuData, RestoParams} from "../types/global";
+import {CreatePositionBody, Position, RestaurantMenuData, RestoParams} from "../types/global";
 import {returnErrorMessage} from "../utils/errorHandlers";
 import {deletePosition, getPositionData, getPositionsData, getRestoPositionsData} from "../services/positions";
 import {prisma} from "../index";
