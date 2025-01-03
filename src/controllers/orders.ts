@@ -31,9 +31,23 @@ export const getOrderById = async (request:FastifyRequest<{ Params: RestoParams 
 }
 
 export const updateOrderById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    const {id} = request.params;
+    if (!isNumber(id)){
+        reply.send(returnErrorMessage("Provided order id is invalid"))
+    }
     reply.send({body:{},message:"Updated order(not really)"});
 }
 
 export const deleteOrderById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    reply.send({body:{},message:"Deleted order(not really)"});
+    //mb soft delete
+    const {id} = request.params;
+    if (!isNumber(id)){
+        reply.send(returnErrorMessage("Provided order id is invalid"))
+    }
+    const order = await prisma.order.findUnique({where:{id:id}});
+    if (!order){
+        reply.send(returnErrorMessage("Order not found"))
+    }
+    await prisma.order.delete({where:{id:id}});
+    reply.send({body:order,message:"Deleted order"});
 }
