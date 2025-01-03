@@ -62,6 +62,22 @@ interface Restaurant {
     restaurant_state_id: number;
 }
 
+interface OrderUpdateInput {
+    is_deleted?: boolean;
+}
+
+interface Order {
+    id: number;
+    order_number: number;
+    display_id: number;
+    orderer_email: string;
+    order_time: number;
+    expected_serve_time: number;
+    serve_time: number;
+    order_state_id: number;
+    is_deleted: boolean;
+}
+
 // Main response type that will hold all restaurant related information
 interface RestaurantMenuData {
     restaurantId: number;
