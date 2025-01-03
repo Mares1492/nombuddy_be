@@ -1,5 +1,8 @@
 import {FastifyReply, FastifyRequest} from "fastify";
 import {RestoParams} from "../types/global";
+import {prisma} from "../index";
+import {returnErrorMessage} from "../utils/errorHandlers";
+import {isNumber} from "../utils/validators";
 
 
 export const getAllRestaurantOrders = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
@@ -16,7 +19,15 @@ export const createNewOrder = async (request:FastifyRequest<{ Params: RestoParam
 }
 
 export const getOrderById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    reply.send({body:{},message:"Found order(not really)"});
+    const {id} = request.params;
+    if (!isNumber(id)){
+        reply.send(returnErrorMessage("Provided order id is invalid"))
+    }
+    const order = await prisma.order.findUnique({where:{id:id}});
+    if (!order){
+        reply.send(returnErrorMessage("Order not found"))
+    }
+    reply.send({body:order,message:"Found order"});
 }
 
 export const updateOrderById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
