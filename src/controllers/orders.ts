@@ -1,5 +1,5 @@
 import {FastifyReply, FastifyRequest} from "fastify";
-import {RestoParams} from "../types/global";
+import {Order, RestoParams} from "../types/global";
 import {prisma} from "../index";
 import {returnErrorMessage} from "../utils/errorHandlers";
 import {isNumber} from "../utils/validators";
@@ -30,11 +30,12 @@ export const getOrderById = async (request:FastifyRequest<{ Params: RestoParams 
     reply.send({body:order,message:"Found order"});
 }
 
-export const updateOrderById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+export const updateOrderById = async (request:FastifyRequest<{ Params: RestoParams, Body:Order  }>, reply:FastifyReply) => {
     const {id} = request.params;
     if (!isNumber(id)){
         reply.send(returnErrorMessage("Provided order id is invalid"))
     }
+    await prisma.order.update({where:{id:id},data:request.body});
     reply.send({body:{},message:"Updated order(not really)"});
 }
 
