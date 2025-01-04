@@ -86,7 +86,7 @@ model order {
   orderer_email       String                @db.VarChar(50)
   order_time          DateTime              @db.Timestamp(6)
   expected_serve_time DateTime              @db.Timestamp(6)
-  serve_time          DateTime              @db.Timestamp(6)
+  serve_time          DateTime?             @db.Timestamp(6)
   order_state_id      Int
   is_deleted          Boolean               @default(false)
   order_state         order_state           @relation(fields: [order_state_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_order_state")
