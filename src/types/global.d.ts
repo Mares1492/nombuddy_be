@@ -62,6 +62,18 @@ interface Restaurant {
     restaurant_state_id: number;
 }
 
+interface OrderCreateClientData {
+    expected_serve_time: Date;
+    order_number: number;
+    orderer_email: string;
+}
+
+interface OrderCreateInput {
+    positions: number[];
+    client_data: OrderCreateClientData;
+
+}
+
 interface OrderUpdateInput {
     is_deleted?: boolean;
 }
