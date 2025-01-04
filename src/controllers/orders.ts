@@ -1,5 +1,5 @@
 import {FastifyReply, FastifyRequest} from "fastify";
-import {Order, OrderUpdateInput, RestoParams} from "../types/global";
+import {Order, OrderCreateInput, OrderUpdateInput, RestoParams} from "../types/global";
 import {prisma} from "../index";
 import {returnErrorMessage} from "../utils/errorHandlers";
 import {isNumber} from "../utils/validators";
@@ -13,9 +13,14 @@ export const getRestaurantOrderById = async (request:FastifyRequest<{ Params: Re
     reply.send({body:{},message:"Got all orders from restaurant(not really)"});
 }
 
-export const createNewOrder = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    // create new order
-    reply.send({body:{},message:"Created order(not really)"});
+export const createNewOrder = async (request:FastifyRequest<{ Params: RestoParams, Body: OrderCreateInput }>, reply:FastifyReply) => {
+    const newOrder = await prisma.order.create({data:{
+            display_id: crypto.randomUUID(),
+            order_time: new Date(),
+            order_state_id: 1,
+            ...request.body.client_data
+    }})
+    reply.send({body:{},message:"Created order"});
 }
 
 export const getOrderById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
