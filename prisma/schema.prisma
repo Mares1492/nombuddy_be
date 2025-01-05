@@ -234,8 +234,8 @@ model order_menu_position {
   id               Int           @id(map: "order_category_position_pk") @default(autoincrement())
   order_id         Int
   menu_position_id Int
-  chosen_options   Int
   is_done          Boolean       @default(false)
+  chosen_options   Json?
   order            order         @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_categories_order")
   menu_position    menu_position @relation(fields: [menu_position_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_menu_position_menu_position_id_fk")
 }
