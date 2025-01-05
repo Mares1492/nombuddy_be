@@ -9,8 +9,8 @@ export const getAllRestaurantOrders = async (request:FastifyRequest<{ Params: Re
     reply.send({body:{},message:"Got all orders from restaurant(not really)"});
 }
 
-export const getRestaurantOrderById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
-    reply.send({body:{},message:"Got all orders from restaurant(not really)"});
+export const getRestaurantByOrderId = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
+    reply.send({body:{},message:"Got place of order: {id}(not really)"});
 }
 
 export const createNewOrder = async (request:FastifyRequest<{ Params: RestoParams, Body: OrderCreateInput }>, reply:FastifyReply) => {
@@ -20,7 +20,19 @@ export const createNewOrder = async (request:FastifyRequest<{ Params: RestoParam
             order_state_id: 1,
             ...request.body.client_data
     }})
-    reply.send({body:{},message:"Created order"});
+    if (!newOrder) {
+        reply.send(returnErrorMessage("Could not create order"));
+    }
+    const orderPositions = request.body.positions.map(menu_position_id=>(
+        {
+            order_id: newOrder.id,
+            menu_position_id,
+            chosen_options: {}
+        }
+    ))
+    //@ts-ignore
+    const newOrderPositions = await prisma.order_menu_position.createMany({data:orderPositions})
+    reply.send({body:newOrder,message:"Created order"});
 }
 
 export const getOrderById = async (request:FastifyRequest<{ Params: RestoParams }>, reply:FastifyReply) => {
