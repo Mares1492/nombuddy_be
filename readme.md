@@ -1,6 +1,6 @@
-# NomBuddy Backend
+A backend service for NomBuddy - A universal contactless ordering system prototype
+It is a practical part of my Bachelor of Computer Science [THESIS](https://www.etera.ee/zoom/206899/view?page=1)
 
-A backend service for NomBuddy - your companion app for food recommendations and dining experiences.
 
 ## Overview
 
@@ -9,9 +9,9 @@ NomBuddy Backend provides APIs for user management, restaurant data, recommendat
 ## Tech Stack
 
 - **Runtime:** Node.js
-- **Language:** JavaScript
-- **Framework:** Express.js (or your chosen framework)
-- **Database:** (Specify your DB: MongoDB, PostgreSQL, etc.)
+- **Language:** Typescript
+- **Framework:** Fastify, Prisma
+- **Database:** PostgreSQL
 
 ## Getting Started
 
@@ -50,8 +50,15 @@ The server will be available at `http://localhost:3000`
 
 - `GET /api/restaurants` - Get restaurant list
 - `POST /api/users` - Create user account
-- `GET /api/recommendations` - Get personalized recommendations
+- `GET /api/recommendations` - Get personalized recommendations | not implemented
 
 ## License
 
 MIT License - see LICENSE file for details
+
+## Extra content
+### DB model
+<img width="735" height="955" alt="image" src="https://github.com/user-attachments/assets/574486b1-e357-4c11-9de1-722763daf2a7" />
+
+### Some endpoint examples
+<img width="1083" height="1134" alt="image" src="https://github.com/user-attachments/assets/a5d01a7b-3083-4b42-91ce-2ddaf0e1c5ce" />
