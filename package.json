@@ -1,6 +1,6 @@
 {
   "name": "nombuddy_be",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "main": "index.js",
   "scripts": {
     "start": "npx ts-node-dev src/index.ts",
@@ -10,9 +10,9 @@
   "prisma": {
     "seed": "ts-node ./prisma/seed.ts"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "Mares Sumarok",
+  "license": "MIT",
+  "description": "A backend service for NomBuddy - A universal contactless ordering system prototype",
   "dependencies": {
     "@fastify/autoload": "^6.0.2",
     "@prisma/client": "^6.1.0",
