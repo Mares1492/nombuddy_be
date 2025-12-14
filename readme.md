@@ -18,7 +18,7 @@ NomBuddy Backend provides APIs for user management, restaurant data, recommendat
 ### Prerequisites
 
 - Node.js v14+
-- npm or yarn
+- npm
 
 ### Installation
 
